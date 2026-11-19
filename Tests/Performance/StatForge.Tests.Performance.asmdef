@@ -1,0 +1,33 @@
+{
+    "name": "StatForge.Tests.Performance",
+    "rootNamespace": "StatForge.Tests.Performance",
+    "references": [
+        "StatForge",
+        "StatForge.Tests.Shared",
+        "UnityEngine.TestRunner",
+        "UnityEditor.TestRunner",
+        "Unity.PerformanceTesting"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS",
+        "STATFORGE_PERFORMANCE_TESTS"
+    ],
+    "versionDefines": [
+        {
+            "name": "com.unity.test-framework.performance",
+            "expression": "3.0.0",
+            "define": "STATFORGE_PERFORMANCE_TESTS"
+        }
+    ],
+    "noEngineReferences": false
+}
