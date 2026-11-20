@@ -73,9 +73,9 @@ namespace StatForge.Tests
         public void GetValue_DirtyWithModifiers_DoesNotAllocate()
         {
             // Added outside the lambda: List growth is a legitimate allocation, not what this test guards.
-            this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 1f));
-            this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 2f));
-            this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 3f));
+            this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 1f));
+            this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 2f));
+            this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 3f));
             this._container.GetValue(Health);
 
             Assert.That(() =>
@@ -90,8 +90,8 @@ namespace StatForge.Tests
         {
             // EqualityComparer<T>.Default is what Dictionary/HashSet use: without IEquatable<T> it falls back
             // to Equals(object) and boxes both handles. Experiment: remove IEquatable and watch this go red.
-            StatModifierHandle a = this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 1f));
-            StatModifierHandle b = this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 2f));
+            StatModifierHandle a = this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 1f));
+            StatModifierHandle b = this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 2f));
             EqualityComparer<StatModifierHandle> comparer = EqualityComparer<StatModifierHandle>.Default;
 
             Assert.That(() =>

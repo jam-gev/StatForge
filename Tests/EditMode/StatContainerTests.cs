@@ -245,7 +245,7 @@ namespace StatForge.Tests
             const float resultValue = 110;
 
             this._container.AddStat(CreateDefinition(Health, originalBase));
-            StatModifier statModifier = StatModifier.Create(Health, StandardStatChannel.Add, 10);
+            StatModifier statModifier = StatModifier.Create(Health, StandardStatModifierChannel.Add, 10);
             this._container.AddModifier(statModifier);
 
             Assert.AreEqual(resultValue, this._container.GetValue(Health));
@@ -260,7 +260,7 @@ namespace StatForge.Tests
             this._container.AddStat(CreateDefinition(Health, originalBase));
             Assert.AreEqual(originalBase, this._container.GetValue(Health));
 
-            StatModifier statModifier = StatModifier.Create(Health, StandardStatChannel.Add, 10);
+            StatModifier statModifier = StatModifier.Create(Health, StandardStatModifierChannel.Add, 10);
             this._container.AddModifier(statModifier);
 
             Assert.AreEqual(resultValue, this._container.GetValue(Health));
@@ -270,7 +270,7 @@ namespace StatForge.Tests
         public void AddModifier_UnknownStat_Throws()
         {
             this._container.AddStat(CreateDefinition(Health, 100));
-            StatModifier statModifier = StatModifier.Create(Missing, StandardStatChannel.Add, 100);
+            StatModifier statModifier = StatModifier.Create(Missing, StandardStatModifierChannel.Add, 100);
 
             Assert.Throws<KeyNotFoundException>(() => this._container.AddModifier(statModifier));
         }
@@ -287,7 +287,7 @@ namespace StatForge.Tests
             const float originalBase = 100f;
 
             this._container.AddStat(CreateDefinition(Health, originalBase));
-            StatModifierHandle statModifierHandle = this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 10));
+            StatModifierHandle statModifierHandle = this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 10));
             this._container.RemoveModifier(statModifierHandle);
 
             Assert.AreEqual(originalBase, this._container.GetValue(Health));
@@ -299,7 +299,7 @@ namespace StatForge.Tests
             const float originalBase = 100f;
 
             this._container.AddStat(CreateDefinition(Health, originalBase));
-            StatModifierHandle statModifierHandle = this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 10));
+            StatModifierHandle statModifierHandle = this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 10));
 
             Assert.AreEqual(true, this._container.RemoveModifier(statModifierHandle));
             Assert.AreEqual(false, this._container.RemoveModifier(statModifierHandle));
@@ -312,8 +312,8 @@ namespace StatForge.Tests
             const float resultValue = 110;
 
             this._container.AddStat(CreateDefinition(Health, originalBase));
-            StatModifierHandle willBeRemovedHandle = this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 10));
-            this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 10));
+            StatModifierHandle willBeRemovedHandle = this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 10));
+            this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 10));
 
             this._container.RemoveModifier(willBeRemovedHandle);
 
@@ -327,7 +327,7 @@ namespace StatForge.Tests
             const float resultValue = 110;
 
             this._container.AddStat(CreateDefinition(Health, originalBase));
-            this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 10));
+            this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 10));
 
             Assert.AreEqual(false, this._container.RemoveModifier(default));
             Assert.AreEqual(resultValue, this._container.GetValue(Health));
@@ -340,7 +340,7 @@ namespace StatForge.Tests
             const float resultValue = 110;
 
             this._container.AddStat(CreateDefinition(Health, originalBase));
-            StatModifierHandle real = this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 10));
+            StatModifierHandle real = this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 10));
             // Same container and entry id, only the stat is unknown -> exercises the missing-node branch.
             var unknownStat = new StatModifierHandle(real.ContainerId, Missing, real.EntryId);
 
@@ -355,10 +355,10 @@ namespace StatForge.Tests
             const float resultValue = 110;
 
             this._container.AddStat(CreateDefinition(Health, originalBase));
-            StatModifierHandle willBeRemovedHandle = this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 10));
+            StatModifierHandle willBeRemovedHandle = this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 10));
             Assert.IsTrue(this._container.RemoveModifier(willBeRemovedHandle));
 
-            this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 10));
+            this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 10));
             Assert.IsFalse(this._container.RemoveModifier(willBeRemovedHandle));
 
             Assert.AreEqual(resultValue, this._container.GetValue(Health));
@@ -371,8 +371,8 @@ namespace StatForge.Tests
             this._container.AddStat(CreateDefinition(Health, 100f));
             other.AddStat(CreateDefinition(Health, 100f));
 
-            StatModifierHandle handleFromThis = this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 10));
-            StatModifierHandle handleFromOther = other.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 10));
+            StatModifierHandle handleFromThis = this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 10));
+            StatModifierHandle handleFromOther = other.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 10));
 
             // Precondition: same StatId + EntryId, so only ContainerId tells them apart.
             Assert.AreEqual(handleFromThis.EntryId, handleFromOther.EntryId);
@@ -390,8 +390,8 @@ namespace StatForge.Tests
         {
             this._container.AddStat(CreateDefinition(Health, 100f));
 
-            this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 10));
-            this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 5));
+            this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 10));
+            this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 5));
 
             Assert.AreEqual(115f, this._container.GetValue(Health));
         }
@@ -401,7 +401,7 @@ namespace StatForge.Tests
         {
             this._container.AddStat(CreateDefinition(Health, 100f));
 
-            this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, -30));
+            this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, -30));
 
             Assert.AreEqual(70f, this._container.GetValue(Health));
         }
@@ -411,7 +411,7 @@ namespace StatForge.Tests
         {
             this._container.AddStat(CreateDefinition(Health, 100f));
 
-            StatModifierHandle handle = this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 10));
+            StatModifierHandle handle = this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 10));
 
             Assert.AreEqual(Health, handle.StatId);
         }
@@ -421,8 +421,8 @@ namespace StatForge.Tests
         {
             this._container.AddStat(CreateDefinition(Health, 100f));
 
-            StatModifierHandle first = this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 10));
-            StatModifierHandle second = this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 10));
+            StatModifierHandle first = this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 10));
+            StatModifierHandle second = this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 10));
 
             Assert.AreNotEqual(first, second);
         }
@@ -452,7 +452,7 @@ namespace StatForge.Tests
         public void Handle_WorksAsHashSetKey()
         {
             this._container.AddStat(CreateDefinition(Health, 100f));
-            StatModifierHandle handle = this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 10));
+            StatModifierHandle handle = this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 10));
 
             var applied = new HashSet<StatModifierHandle> { handle };
 
@@ -465,7 +465,7 @@ namespace StatForge.Tests
         {
             this._container.AddStat(CreateDefinition(Health, 100f));
 
-            StatModifierHandle handle = this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 10));
+            StatModifierHandle handle = this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 10));
 
             Assert.IsTrue(handle.IsValid);
             Assert.AreNotEqual(default(StatModifierHandle), handle);
@@ -476,7 +476,7 @@ namespace StatForge.Tests
         {
             this._container.AddStat(CreateDefinition(Health, 100f, max: 120f));
 
-            this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 50));
+            this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 50));
 
             Assert.AreEqual(120f, this._container.GetValue(Health));
             Assert.AreEqual(100f, this._container.GetBase(Health));
@@ -487,7 +487,7 @@ namespace StatForge.Tests
         {
             this._container.AddStat(CreateDefinition(Health, 100f));
 
-            this._container.AddModifier(StatModifier.Create(Health, StandardStatChannel.Add, 10));
+            this._container.AddModifier(StatModifier.Create(Health, StandardStatModifierChannel.Add, 10));
 
             Assert.AreEqual(100f, this._container.GetBase(Health));
         }

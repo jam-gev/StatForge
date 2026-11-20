@@ -36,7 +36,7 @@ namespace StatForge.Tests
             Object.DestroyImmediate(this._aggregator);
         }
 
-        private void Add(StandardStatChannel channel, float value)
+        private void Add(StandardStatModifierChannel channel, float value)
         {
             this._entries.Add(new StatModifierEntry(++this._nextEntryId, (int)channel, value));
         }
@@ -57,8 +57,8 @@ namespace StatForge.Tests
         [Test]
         public void TwoAddPercent_AreSummed()
         {
-            Add(StandardStatChannel.AddPercent, 0.1f);
-            Add(StandardStatChannel.AddPercent, 0.1f);
+            Add(StandardStatModifierChannel.AddPercent, 0.1f);
+            Add(StandardStatModifierChannel.AddPercent, 0.1f);
 
             // 100 × (1 + 0.2), not 100 × 1.1 × 1.1 = 121
             Assert.AreEqual(120f, Calculate(), Tolerance);
@@ -67,8 +67,8 @@ namespace StatForge.Tests
         [Test]
         public void TwoMultiply_AreMultiplied()
         {
-            Add(StandardStatChannel.Multiply, 2f);
-            Add(StandardStatChannel.Multiply, 1.5f);
+            Add(StandardStatModifierChannel.Multiply, 2f);
+            Add(StandardStatModifierChannel.Multiply, 1.5f);
 
             // Catches "=" instead of "*=" (would give 150)
             Assert.AreEqual(300f, Calculate(), Tolerance);
@@ -77,8 +77,8 @@ namespace StatForge.Tests
         [Test]
         public void Add_IsAppliedBeforePercent()
         {
-            Add(StandardStatChannel.Add, 10f);
-            Add(StandardStatChannel.AddPercent, 0.5f);
+            Add(StandardStatModifierChannel.Add, 10f);
+            Add(StandardStatModifierChannel.AddPercent, 0.5f);
 
             // (100 + 10) × 1.5, not 100 × 1.5 + 10 = 160
             Assert.AreEqual(165f, Calculate(), Tolerance);
@@ -87,9 +87,9 @@ namespace StatForge.Tests
         [Test]
         public void FullOrder_AddThenPercentThenMultiply()
         {
-            Add(StandardStatChannel.Add, 10f);
-            Add(StandardStatChannel.AddPercent, 0.5f);
-            Add(StandardStatChannel.Multiply, 2f);
+            Add(StandardStatModifierChannel.Add, 10f);
+            Add(StandardStatModifierChannel.AddPercent, 0.5f);
+            Add(StandardStatModifierChannel.Multiply, 2f);
 
             Assert.AreEqual(330f, Calculate(), Tolerance);
         }
@@ -97,9 +97,9 @@ namespace StatForge.Tests
         [Test]
         public void EntryOrder_DoesNotChangeResult()
         {
-            Add(StandardStatChannel.Multiply, 2f);
-            Add(StandardStatChannel.AddPercent, 0.5f);
-            Add(StandardStatChannel.Add, 10f);
+            Add(StandardStatModifierChannel.Multiply, 2f);
+            Add(StandardStatModifierChannel.AddPercent, 0.5f);
+            Add(StandardStatModifierChannel.Add, 10f);
 
             Assert.AreEqual(330f, Calculate(), Tolerance);
         }
@@ -107,7 +107,7 @@ namespace StatForge.Tests
         [Test]
         public void MultiplyBelowOne_ReducesValue()
         {
-            Add(StandardStatChannel.Multiply, 0.5f);
+            Add(StandardStatModifierChannel.Multiply, 0.5f);
 
             Assert.AreEqual(50f, Calculate(), Tolerance);
         }
@@ -115,7 +115,7 @@ namespace StatForge.Tests
         [Test]
         public void NegativeAddPercent_ReducesValue()
         {
-            Add(StandardStatChannel.AddPercent, -0.3f);
+            Add(StandardStatModifierChannel.AddPercent, -0.3f);
 
             Assert.AreEqual(70f, Calculate(), Tolerance);
         }
@@ -127,10 +127,10 @@ namespace StatForge.Tests
         [Test]
         public void Override_IgnoresOtherChannels()
         {
-            Add(StandardStatChannel.Add, 10f);
-            Add(StandardStatChannel.AddPercent, 0.5f);
-            Add(StandardStatChannel.Multiply, 2f);
-            Add(StandardStatChannel.Override, 50f);
+            Add(StandardStatModifierChannel.Add, 10f);
+            Add(StandardStatModifierChannel.AddPercent, 0.5f);
+            Add(StandardStatModifierChannel.Multiply, 2f);
+            Add(StandardStatModifierChannel.Override, 50f);
 
             Assert.AreEqual(50f, Calculate(), Tolerance);
         }
@@ -138,7 +138,7 @@ namespace StatForge.Tests
         [Test]
         public void OverrideToZero_ReturnsZero()
         {
-            Add(StandardStatChannel.Override, 0f);
+            Add(StandardStatModifierChannel.Override, 0f);
 
             // "Override to 0" must differ from "no override"
             Assert.AreEqual(0f, Calculate(), Tolerance);
@@ -147,8 +147,8 @@ namespace StatForge.Tests
         [Test]
         public void TwoOverrides_LastAddedWins()
         {
-            Add(StandardStatChannel.Override, 50f);
-            Add(StandardStatChannel.Override, 70f);
+            Add(StandardStatModifierChannel.Override, 50f);
+            Add(StandardStatModifierChannel.Override, 70f);
 
             Assert.AreEqual(70f, Calculate(), Tolerance);
         }
@@ -168,10 +168,10 @@ namespace StatForge.Tests
         [Test]
         public void Calculate_DoesNotAllocate()
         {
-            Add(StandardStatChannel.Add, 10f);
-            Add(StandardStatChannel.AddPercent, 0.5f);
-            Add(StandardStatChannel.Multiply, 2f);
-            Add(StandardStatChannel.Override, 50f);
+            Add(StandardStatModifierChannel.Add, 10f);
+            Add(StandardStatModifierChannel.AddPercent, 0.5f);
+            Add(StandardStatModifierChannel.Multiply, 2f);
+            Add(StandardStatModifierChannel.Override, 50f);
 
             Assert.That(() => { Calculate(); }, Is.Not.AllocatingGCMemory());
         }
@@ -189,11 +189,11 @@ namespace StatForge.Tests
                 var container = new StatContainer();
                 container.AddStat(definition);
 
-                container.AddModifier(StatModifier.Create(AttackSpeed, StandardStatChannel.AddPercent, 0.2f));
-                container.AddModifier(StatModifier.Create(AttackSpeed, StandardStatChannel.AddPercent, 0.8f));
+                container.AddModifier(StatModifier.Create(AttackSpeed, StandardStatModifierChannel.AddPercent, 0.2f));
+                container.AddModifier(StatModifier.Create(AttackSpeed, StandardStatModifierChannel.AddPercent, 0.8f));
                 Assert.AreEqual(2f, container.GetValue(AttackSpeed), Tolerance, "1 × (1 + 0.2 + 0.8)");
 
-                container.AddModifier(StatModifier.Create(AttackSpeed, StandardStatChannel.Multiply, 2f));
+                container.AddModifier(StatModifier.Create(AttackSpeed, StandardStatModifierChannel.Multiply, 2f));
                 Assert.AreEqual(3f, container.GetValue(AttackSpeed), Tolerance, "4, clamped to Max 3");
                 Assert.AreEqual(1f, container.GetBase(AttackSpeed), Tolerance);
             }
@@ -213,7 +213,7 @@ namespace StatForge.Tests
                 var container = new StatContainer();
                 container.AddStat(definition);
 
-                container.AddModifier(StatModifier.Create(AttackSpeed, StandardStatChannel.AddPercent, -0.9f));
+                container.AddModifier(StatModifier.Create(AttackSpeed, StandardStatModifierChannel.AddPercent, -0.9f));
 
                 Assert.AreEqual(0.2f, container.GetValue(AttackSpeed), Tolerance, "0.1, clamped to Min 0.2");
             }

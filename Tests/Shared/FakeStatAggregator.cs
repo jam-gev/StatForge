@@ -7,7 +7,7 @@ namespace StatForge.Tests.Shared
     /// Lets container/node tests run without depending on the real aggregation order.
     /// Created by <see cref="TestStatDefinitions.Create"/> and destroyed by <see cref="TestStatDefinitions.Destroy"/>.
     /// </summary>
-    public sealed class FakeStatAggregator : StatAggregator<StandardStatChannel>
+    public sealed class FakeStatAggregator : StatAggregator<StandardStatModifierChannel>
     {
         // Test-only state. A real aggregator asset is shared by every stat that uses it,
         // so it must never keep runtime state like this.
@@ -22,7 +22,7 @@ namespace StatForge.Tests.Shared
             // for, not foreach: foreach over IReadOnlyList<T> boxes the enumerator (allocation tests would fail).
             for (int i = 0; i < entries.Count; i++)
             {
-                if (ChannelOf(entries[i]) == StandardStatChannel.Add)
+                if (ChannelOf(entries[i]) == StandardStatModifierChannel.Add)
                 {
                     add += entries[i].Value;
                 }

@@ -3,6 +3,7 @@
   "rootNamespace": "StatForge.Tests",
   "references": [
     "StatForge",
+    "StatForge.Editor",
     "StatForge.Tests.Shared",
     "UnityEngine.TestRunner",
     "UnityEditor.TestRunner"

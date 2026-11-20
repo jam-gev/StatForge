@@ -1,6 +1,6 @@
 namespace StatForge
 {
-    public enum StandardStatChannel
+    public enum StandardStatModifierChannel
     {
         None = 0,
         Add,

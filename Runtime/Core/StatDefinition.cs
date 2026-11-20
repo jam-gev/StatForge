@@ -29,6 +29,17 @@ namespace StatForge
             {
                 throw new InvalidOperationException($"[{Id}] Aggregator is not assigned");
             }
+
+            OnValidateDefinition();
+        }
+
+        /// <summary>
+        /// Extension point for derived definitions (extra data such as icon, display name…).
+        /// Throw to reject the definition. Runs after the package's own checks, which a subclass cannot skip
+        /// (that is why Validate itself is not virtual).
+        /// </summary>
+        protected virtual void OnValidateDefinition()
+        {
         }
 
         private static void ThrowIfInvalid(StatId id, float defaultBase, float? minValue, float? maxValue, StatRounding rounding)

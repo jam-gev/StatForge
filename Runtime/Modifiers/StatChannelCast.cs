@@ -5,26 +5,26 @@ namespace StatForge
 {
     /// <summary>
     /// Converts a project-defined channel enum to/from the int the core stores, without boxing.
-    /// One place for the "enum must be int-backed" rule: the static constructor runs once per TChannel.
+    /// One place for the "enum must be int-backed" rule: the static constructor runs once per TStatModifierChannel.
     /// </summary>
-    internal static class StatChannelCast<TChannel> where TChannel : unmanaged, Enum
+    internal static class StatChannelCast<TStatModifierChannel> where TStatModifierChannel : unmanaged, Enum
     {
         static StatChannelCast()
         {
-            if (UnsafeUtility.SizeOf<TChannel>() != sizeof(int))
+            if (UnsafeUtility.SizeOf<TStatModifierChannel>() != sizeof(int))
             {
-                throw new InvalidOperationException($"Channel enum {typeof(TChannel).Name} must be int-backed (enum {typeof(TChannel).Name} : int)");
+                throw new InvalidOperationException($"Channel enum {typeof(TStatModifierChannel).Name} must be int-backed (enum {typeof(TStatModifierChannel).Name} : int)");
             }
         }
 
-        public static int ToInt(TChannel channel)
+        public static int ToInt(TStatModifierChannel channel)
         {
-            return UnsafeUtility.As<TChannel, int>(ref channel);
+            return UnsafeUtility.As<TStatModifierChannel, int>(ref channel);
         }
 
-        public static TChannel FromInt(int raw)
+        public static TStatModifierChannel FromInt(int raw)
         {
-            return UnsafeUtility.As<int, TChannel>(ref raw);
+            return UnsafeUtility.As<int, TStatModifierChannel>(ref raw);
         }
     }
 }

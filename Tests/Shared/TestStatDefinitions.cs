@@ -18,6 +18,14 @@ namespace StatForge.Tests.Shared
         public static StatDefinition Create(StatId id, float baseValue, float? min = null, float? max = null,
             StatRounding rounding = StatRounding.None, StatAggregator aggregator = null, bool noAggregator = false)
         {
+            return Create<StatDefinition>(id, baseValue, min, max, rounding, aggregator, noAggregator);
+        }
+
+        /// <summary>Same as <see cref="Create"/> for a derived definition type (tests of the extension hook).</summary>
+        public static TDefinition Create<TDefinition>(StatId id, float baseValue, float? min = null, float? max = null,
+            StatRounding rounding = StatRounding.None, StatAggregator aggregator = null, bool noAggregator = false)
+            where TDefinition : StatDefinition
+        {
             if (noAggregator)
             {
                 aggregator = null;
@@ -27,7 +35,7 @@ namespace StatForge.Tests.Shared
                 aggregator = ScriptableObject.CreateInstance<FakeStatAggregator>();
             }
 
-            var definition = ScriptableObject.CreateInstance<StatDefinition>();
+            var definition = ScriptableObject.CreateInstance<TDefinition>();
             definition.name = id.ToString();
 
             using (var so = new SerializedObject(definition))

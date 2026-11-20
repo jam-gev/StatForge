@@ -4,7 +4,7 @@ using UnityEngine;
 namespace StatForge
 {
     [CreateAssetMenu(fileName = "StandardStatAggregator", menuName = "StatForge/StandardStatAggregator")]
-    public sealed class StandardStatAggregator : StatAggregator<StandardStatChannel>
+    public sealed class StandardStatAggregator : StatAggregator<StandardStatModifierChannel>
     {
         public override float Calculate(float baseValue, IReadOnlyList<StatModifierEntry> entries)
         {
@@ -19,29 +19,29 @@ namespace StatForge
             {
                 switch (ChannelOf(entries[index]))
                 {
-                    case StandardStatChannel.Add:
+                    case StandardStatModifierChannel.Add:
                     {
                         sumAddChannel += entries[index].Value;
                         break;
                     }
-                    case StandardStatChannel.AddPercent:
+                    case StandardStatModifierChannel.AddPercent:
                     {
                         sumAddPercentChannel += entries[index].Value;
                         break;
                     }
-                    case StandardStatChannel.Multiply:
+                    case StandardStatModifierChannel.Multiply:
                     {
                         productMultiply *= entries[index].Value;
                         break;
                     }
-                    case StandardStatChannel.Override:
+                    case StandardStatModifierChannel.Override:
                     {
                         overrideValue = entries[index].Value;
                         hasOverride = true;
                         break;
                     }
                     default:
-                    case StandardStatChannel.None:
+                    case StandardStatModifierChannel.None:
                         break;
                 }
             }

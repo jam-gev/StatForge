@@ -20,7 +20,7 @@ namespace StatForge.Tests
             None = 0,
             Add,
             Multiply,
-            FinalAdd, // applied after Multiply: not expressible with StandardStatChannel
+            FinalAdd, // applied after Multiply: not expressible with StandardStatModifierChannel
         }
 
         public enum ByteChannel : byte
