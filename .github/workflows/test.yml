@@ -1,0 +1,45 @@
+name: Tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  test:
+    name: EditMode (${{ matrix.unityVersion }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        unityVersion:
+          - 2022.3.72f1   # lowest version package.json supports
+          - 6000.0.80f1
+    steps:
+      - uses: actions/checkout@v4
+
+      # packageMode: GameCI creates a temporary project, adds this repo as a package and runs its tests.
+      - uses: game-ci/unity-test-runner@v4
+        id: tests
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          packageMode: true
+          projectPath: .
+          unityVersion: ${{ matrix.unityVersion }}
+          testMode: editmode
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: EditMode results (${{ matrix.unityVersion }})
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-${{ matrix.unityVersion }}
+          path: ${{ steps.tests.outputs.artifactsPath }}

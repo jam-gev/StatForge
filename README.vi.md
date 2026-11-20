@@ -1,5 +1,7 @@
 # StatForge
 
+[![Tests](https://github.com/jam-gev/StatForge/actions/workflows/test.yml/badge.svg)](https://github.com/jam-gev/StatForge/actions/workflows/test.yml)
+
 Hệ thống stat (chỉ số) và modifier cho Unity: không cấp phát bộ nhớ trên đường chạy chính, loại modifier (`TStatModifierChannel`) do project tự định nghĩa.
 
 [Vấn đề](#vấn-đề) · [Yêu cầu bài toán](#yêu-cầu-bài-toán) · [Giải pháp và các quyết định thiết kế](#giải-pháp-và-các-quyết-định-thiết-kế) · [Cài đặt](#cài-đặt) · [Cách dùng](#cách-dùng) · [Mở rộng](#mở-rộng) · [Test](#test)

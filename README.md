@@ -1,5 +1,7 @@
 # StatForge
 
+[![Tests](https://github.com/jam-gev/StatForge/actions/workflows/test.yml/badge.svg)](https://github.com/jam-gev/StatForge/actions/workflows/test.yml)
+
 Allocation-free stat & modifier system for Unity, with project-defined modifier types (channels).
 
 [Problem](#problem) · [Concepts](#concepts) · [Design decisions](#design-decisions) · [Install](#install) · [Usage](#usage) · [Extending](#extending) · [Tests](#tests)
